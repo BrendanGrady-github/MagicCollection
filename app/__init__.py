@@ -1,6 +1,6 @@
 from flask import Flask
 from config import Config
-from app.models import db, Card 
+from app.models import db, CollectionEntry, StorageLocation
 
 
 def create_app():

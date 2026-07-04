@@ -1,5 +1,5 @@
 from app import create_app
-from app.models import db, Card
+from app.models import db, CollectionEntry, StorageLocation
 
 app = create_app()
 
