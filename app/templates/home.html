@@ -1,10 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Magic Collection Inventory</title>
-</head>
-<body>
-    <h1>Magic Collection Inventory</h1>
-    <p>Your app is running!</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Search</h2>
+
+<input type="text" placeholder="Search for a card...">
+
+<br>
+<br>
+
+<button>Browse Collection</button>
+<button>Add Card</button>
+
+<hr>
+
+<h2>Collection Statistics</h2>
+
+<p><strong>Unique Cards:</strong> 0</p>
+<p><strong>Total Cards:</strong> 0</p>
+<p><strong>Estimated Value:</strong> $0.00</p>
+
+<hr>
+
+<h2>Quick Links</h2>
+
+<button>Manage Storage</button>
+<button>Import Collection</button>
+<button>Settings</button>
+
+{% endblock %}

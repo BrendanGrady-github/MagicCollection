@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Magic Collection Inventory</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header>
+
+        <h1>Magic Collection Inventory</h1>
+
+        <nav>
+
+            <a href="/">Home</a>
+
+            |
+
+            <a href="/collection">Collection</a>
+
+            |
+
+            <a href="/add-card">Add Card</a>
+
+        </nav>
+
+        <hr>
+
+    </header>
+
+    {% block content %}
+
+    {% endblock %}
+
+</body>
+
+</html>
