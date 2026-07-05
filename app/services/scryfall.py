@@ -1,7 +1,7 @@
 import requests
 
 
-SCRYFALL_NAMED_URL = "https://api.scryfall.com/cards/named"
+SCRYFALL_SEARCH_URL = "https://api.scryfall.com/cards/search"
 
 HEADERS = {
     "User-Agent": (
@@ -13,17 +13,34 @@ HEADERS = {
 }
 
 
-def find_card_by_name(card_name):
+def get_card_printings(card_name):
+    query = f'!"{card_name}" unique:prints'
+
+    all_printings = []
+
     response = requests.get(
-        SCRYFALL_NAMED_URL,
-        params={"fuzzy": card_name},
+        SCRYFALL_SEARCH_URL,
+        params={"q": query, "order": "released"},
         headers=HEADERS,
         timeout=10
     )
 
-    if response.status_code != 200:
-        print("Scryfall error:", response.status_code)
-        print(response.json())
-        return None
+    while True:
+        if response.status_code != 200:
+            print("Scryfall error:", response.status_code)
+            print(response.json())
+            return all_printings
 
-    return response.json()
+        data = response.json()
+        all_printings.extend(data["data"])
+
+        if not data.get("has_more"):
+            break
+
+        response = requests.get(
+            data["next_page"],
+            headers=HEADERS,
+            timeout=10
+        )
+
+    return all_printings

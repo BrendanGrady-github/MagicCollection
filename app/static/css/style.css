@@ -25,3 +25,34 @@ input {
     width: 350px;
     padding: 10px;
 }
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 220px);
+    gap: 24px;
+    margin-top: 20px;
+}
+
+.printing-card {
+    background-color: white;
+    padding: 12px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+}
+
+.printing-card img {
+    width: 100%;
+}
+
+.pagination {
+    margin-top: 30px;
+    font-size: 18px;
+}
+
+.pagination a {
+    margin-right: 20px;
+}
+
+.pagination span {
+    margin-right: 20px;
+}

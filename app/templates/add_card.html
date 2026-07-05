@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Add Card</h2>
+
+<form method="GET" action="/add-card">
+    <input type="text" name="card_name" placeholder="Search for a card..." value="{{ card_name }}">
+    <button type="submit">Search</button>
+
+    {% if sets %}
+        <br>
+        <br>
+
+        <label for="set_name">Set:</label>
+
+        <select name="set_name" id="set_name">
+            <option value="">All Sets</option>
+
+            {% for set in sets %}
+                <option value="{{ set }}" {% if set == selected_set %}selected{% endif %}>
+                    {{ set }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filter Set</button>
+    {% endif %}
+</form>
+
+{% if printings %}
+
+    <h3>Choose a Printing</h3>
+
+    <div class="card-grid">
+        {% for card in printings %}
+            <div class="printing-card">
+                <h4>{{ card.name }}</h4>
+                <p>{{ card.set_name }} - #{{ card.collector_number }}</p>
+
+                {% if card.image_uris %}
+                    <img src="{{ card.image_uris.normal }}" alt="{{ card.name }}">
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if total_pages > 1 %}
+        <div class="pagination">
+
+            {% if page > 1 %}
+                <a href="/add-card?card_name={{ card_name }}&set_name={{ selected_set }}&page={{ page - 1 }}">
+                    Previous
+                </a>
+            {% endif %}
+
+            <span>Page {{ page }} of {{ total_pages }}</span>
+
+            {% if page < total_pages %}
+                <a href="/add-card?card_name={{ card_name }}&set_name={{ selected_set }}&page={{ page + 1 }}">
+                    Next
+                </a>
+            {% endif %}
+
+        </div>
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}
