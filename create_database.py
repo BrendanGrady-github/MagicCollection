@@ -1,5 +1,5 @@
 from app import create_app
-from app.models import db, CollectionEntry, StorageLocation
+from app.models import db, CollectionEntry, Storage, StorageSection
 
 app = create_app()
 

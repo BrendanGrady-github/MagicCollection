@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Manage Storage</h2>
+
+<form method="POST" action="/storage">
+
+    <label for="storage_type">Storage Type:</label>
+
+    <select name="storage_type" id="storage_type" required>
+        <option value="">Choose a storage type...</option>
+        <option value="Card Box">Card Box</option>
+        <option value="Binder">Binder</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <br><br>
+
+    <label for="name">Storage Name:</label>
+
+    <input
+        type="text"
+        name="name"
+        id="name"
+        placeholder="Main Collection, Rare Binder, Trade Binder..."
+        required
+    >
+
+    <br><br>
+
+    <button type="submit">Add Storage</button>
+
+</form>
+
+<hr>
+
+<h3>Your Storage</h3>
+
+{% if locations %}
+
+    <div class="storage-grid">
+
+        {% for location in locations %}
+
+            <div class="storage-card">
+
+                <h4>{{ location.name }}</h4>
+
+                <p><strong>Type:</strong> {{ location.storage_type }}</p>
+
+                <p><strong>Sections:</strong> {{ location.sections | length }}</p>
+
+                <p><strong>Cards Stored:</strong> 0</p>
+
+                <form
+                    method="POST"
+                    action="/storage/delete/{{ location.id }}"
+                >
+                    <button
+                        type="submit"
+                        onclick="return confirm('Delete storage &quot;{{ location.name }}&quot;?')"
+                    >
+                        Delete
+                    </button>
+                </form>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% else %}
+
+    <p>No storage added yet.</p>
+
+{% endif %}
+
+{% endblock %}

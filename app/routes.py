@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 
-from app.services.scryfall import get_card_printings
+from app.models import db, Storage
+from app.services.scryfall import get_card_printings, get_card_by_id
 
 main = Blueprint("main", __name__)
 
@@ -48,3 +49,50 @@ def add_card():
         page=page,
         total_pages=total_pages
     )
+
+
+@main.route("/add-card/confirm")
+def confirm_add_card():
+    scryfall_id = request.args.get("scryfall_id")
+
+    card = get_card_by_id(scryfall_id)
+
+    if card is None:
+        return "Card not found.", 404
+
+    return render_template("confirm_add_card.html", card=card)
+
+
+@main.route("/storage", methods=["GET", "POST"])
+def storage():
+    if request.method == "POST":
+        storage_type = request.form.get("storage_type")
+        name = request.form.get("name")
+
+        if storage_type and name:
+            new_storage = Storage(
+                storage_type=storage_type,
+                name=name
+            )
+
+            db.session.add(new_storage)
+            db.session.commit()
+
+        return redirect(url_for("main.storage"))
+
+    storages = Storage.query.order_by(
+        Storage.storage_type,
+        Storage.name
+    ).all()
+
+    return render_template("storage.html", locations=storages)
+
+
+@main.route("/storage/delete/<int:storage_id>", methods=["POST"])
+def delete_storage(storage_id):
+    storage = Storage.query.get_or_404(storage_id)
+
+    db.session.delete(storage)
+    db.session.commit()
+
+    return redirect(url_for("main.storage"))

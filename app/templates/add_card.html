@@ -4,23 +4,12 @@
 
 <h2>Add Card</h2>
 
-<!-- Search Form -->
 <form method="GET" action="/add-card">
-
-    <input
-        type="text"
-        name="card_name"
-        placeholder="Search for a card..."
-        value="{{ card_name }}"
-    >
-
+    <input type="text" name="card_name" placeholder="Search for a card..." value="{{ card_name }}">
     <button type="submit">Search</button>
 
     {% if sets %}
-
         <br><br>
-
-        <!-- Searchable Set Filter -->
 
         <label for="set_name">Set:</label>
 
@@ -40,79 +29,51 @@
             {% endfor %}
         </datalist>
 
-        <button type="submit">
-            Filter Set
-        </button>
+        <button type="submit">Filter Set</button>
 
         <a href="/add-card?card_name={{ card_name }}">
             Clear Set Filter
-</a>
-
+        </a>
     {% endif %}
-
 </form>
 
 {% if printings %}
 
     <h3>Choose a Printing</h3>
 
-    <!-- Card Grid -->
-
     <div class="card-grid">
-
         {% for card in printings %}
-
             <div class="printing-card">
+                <a href="/add-card/confirm?scryfall_id={{ card.id }}">
+                    <h4>{{ card.name }}</h4>
+                    <p>{{ card.set_name }} - #{{ card.collector_number }}</p>
 
-                <h4>{{ card.name }}</h4>
-
-                <p>
-                    {{ card.set_name }}
-                    -
-                    #{{ card.collector_number }}
-                </p>
-
-                {% if card.image_uris %}
-                    <img
-                        src="{{ card.image_uris.normal }}"
-                        alt="{{ card.name }}"
-                    >
-                {% endif %}
-
+                    {% if card.image_uris %}
+                        <img src="{{ card.image_uris.normal }}" alt="{{ card.name }}">
+                    {% endif %}
+                </a>
             </div>
-
         {% endfor %}
-
     </div>
 
-    <!-- Pagination -->
-
     {% if total_pages > 1 %}
-
         <div class="pagination">
 
             {% if page > 1 %}
-
                 <a href="/add-card?card_name={{ card_name }}&set_name={{ selected_set }}&page={{ page - 1 }}">
-                    ← Previous
+                    Previous
                 </a>
-
             {% endif %}
 
-            <span>
-                Page {{ page }} of {{ total_pages }}
-            </span>
+            <span>Page {{ page }} of {{ total_pages }}</span>
 
             {% if page < total_pages %}
-
                 <a href="/add-card?card_name={{ card_name }}&set_name={{ selected_set }}&page={{ page + 1 }}">
-                    Next →
+                    Next
                 </a>
-
             {% endif %}
 
         </div>
-
     {% endif %}
 
 {% endif %}

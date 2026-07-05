@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Add This Card?</h2>
+
+<h3>{{ card.name }}</h3>
+
+<p>
+    {{ card.set_name }} - #{{ card.collector_number }}
+</p>
+
+{% if card.image_uris %}
+    <img src="{{ card.image_uris.normal }}" alt="{{ card.name }}" width="300">
+{% endif %}
+
+<hr>
+
+<form method="POST" action="#">
+
+    <input type="hidden" name="scryfall_id" value="{{ card.id }}">
+
+    <label>Quantity:</label>
+    <input
+        type="number"
+        name="quantity"
+        value="1"
+        min="1"
+    >
+
+    <br><br>
+
+    <label>Condition:</label>
+
+    <select name="condition">
+        <option value="Near Mint">Near Mint</option>
+        <option value="Lightly Played">Lightly Played</option>
+        <option value="Moderately Played">Moderately Played</option>
+        <option value="Heavily Played">Heavily Played</option>
+        <option value="Damaged">Damaged</option>
+    </select>
+
+    <br><br>
+
+    <label>Finish:</label>
+
+    <select name="finish">
+
+        {% for finish in card.finishes %}
+
+            <option value="{{ finish }}">
+                {{ finish | capitalize }}
+            </option>
+
+        {% endfor %}
+
+    </select>
+
+    <br><br>
+
+    <label>Notes:</label>
+
+    <br>
+
+    <textarea
+        name="notes"
+        rows="4"
+        cols="50"
+    ></textarea>
+
+    <br><br>
+
+    <button type="submit">
+        Save Card
+    </button>
+
+</form>
+
+{% endblock %}
