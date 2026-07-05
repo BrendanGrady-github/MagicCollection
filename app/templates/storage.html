@@ -29,7 +29,21 @@
 
     <br><br>
 
-    <button type="submit">Add Storage</button>
+    <input
+        type="checkbox"
+        id="uses_sections"
+        name="uses_sections"
+    >
+
+    <label for="uses_sections">
+        This storage uses sections
+    </label>
+
+    <br><br>
+
+    <button type="submit">
+        Add Storage
+    </button>
 
 </form>
 
@@ -47,23 +61,55 @@
 
                 <h4>{{ location.name }}</h4>
 
-                <p><strong>Type:</strong> {{ location.storage_type }}</p>
+                <p>
+                    <strong>Type:</strong>
+                    {{ location.storage_type }}
+                </p>
 
-                <p><strong>Sections:</strong> {{ location.sections | length }}</p>
+                <p>
+                    <strong>Uses Sections:</strong>
 
-                <p><strong>Cards Stored:</strong> 0</p>
+                    {% if location.uses_sections %}
+                        Yes
+                    {% else %}
+                        No
+                    {% endif %}
+                </p>
 
-                <form
-                    method="POST"
-                    action="/storage/delete/{{ location.id }}"
-                >
+                <p>
+                    <strong>Cards Stored:</strong>
+                    0
+                </p>
+
+                <div class="storage-actions">
+
+                    <a href="/storage/{{ location.id }}">
+                        <button type="button">
+                            Open
+                        </button>
+                    </a>
+
                     <button
-                        type="submit"
-                        onclick="return confirm('Delete storage &quot;{{ location.name }}&quot;?')"
+                        type="button"
+                        disabled
                     >
-                        Delete
+                        Edit
                     </button>
-                </form>
+
+                    <form
+                        method="POST"
+                        action="/storage/delete/{{ location.id }}"
+                        style="display: inline;"
+                    >
+                        <button
+                            type="submit"
+                            onclick="return confirm('Delete storage &quot;{{ location.name }}&quot;?')"
+                        >
+                            Delete
+                        </button>
+                    </form>
+
+                </div>
 
             </div>
 

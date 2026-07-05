@@ -2,32 +2,66 @@
 
 {% block content %}
 
-<h2>Search</h2>
+<h1>Magic Collection Manager</h1>
 
-<input type="text" placeholder="Search for a card...">
-
-<br>
-<br>
-
-<button>Browse Collection</button>
-<button>Add Card</button>
+<p>
+    Manage your Magic: The Gathering collection.
+</p>
 
 <hr>
 
-<h2>Collection Statistics</h2>
+<h2>📖 Collection Summary</h2>
 
-<p><strong>Unique Cards:</strong> 0</p>
-<p><strong>Total Cards:</strong> 0</p>
-<p><strong>Estimated Value:</strong> $0.00</p>
+<div class="dashboard-summary">
+
+    <div class="dashboard-card">
+        <h3>Total Cards</h3>
+        <p>0</p>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Unique Cards</h3>
+        <p>0</p>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Collection Value</h3>
+        <p>$0.00</p>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Storage Locations</h3>
+        <p>0</p>
+    </div>
+
+</div>
 
 <hr>
 
-<h2>Quick Links</h2>
+<h2>⚡ Quick Actions</h2>
 
-<a href="/storage">
-    <button>Manage Storage</button>
-</a>
-<button>Import Collection</button>
-<button>Settings</button>
+<div class="dashboard-actions">
+
+    <a href="/storage">
+        <button>Manage Storage</button>
+    </a>
+
+    <a href="/add-card">
+        <button>Add Cards</button>
+    </a>
+
+    <button disabled>
+        Browse Collection
+    </button>
+
+</div>
+
+<hr>
+
+<h2>🕒 Recent Activity</h2>
+
+<p>
+    No cards have been added yet.
+</p>
 
 {% endblock %}

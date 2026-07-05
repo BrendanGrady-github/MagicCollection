@@ -2,38 +2,119 @@
 <html>
 
 <head>
-    <title>Magic Collection Inventory</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Magic Collection Manager</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
 </head>
 
 <body>
 
-    <header>
+    <div class="app-layout">
 
-        <h1>Magic Collection Inventory</h1>
+        <aside class="sidebar">
 
-        <nav>
+            <div class="sidebar-logo">
 
-            <a href="/">Home</a>
+                <a href="/">
 
-            |
+                    <img
+                        src="{{ url_for('static', filename='img/logo.png') }}"
+                        alt="Magic Collection Manager Logo"
+                    >
 
-            <a href="/collection">Collection</a>
+                </a>
 
-            |
+            </div>
 
-            <a href="/add-card">Add Card</a>
+            <hr>
 
-        </nav>
+            <div class="sidebar-stats">
 
-        <hr>
+                <p>
+                    <strong>Cards</strong><br>
+                    0
+                </p>
 
-    </header>
+                <p>
+                    <strong>Value</strong><br>
+                    $0.00
+                </p>
 
-    {% block content %}
+            </div>
 
-    {% endblock %}
+            <hr>
+
+            <nav class="sidebar-nav">
+
+                <a
+                    href="/"
+                    class="{% if request.path == '/' %}active{% endif %}"
+                >
+                    <span class="nav-icon">◇</span>
+                    Dashboard
+                </a>
+
+                <a
+                    href="/collection"
+                    class="{% if request.path.startswith('/collection') %}active{% endif %}"
+                >
+                    <span class="nav-icon">◆</span>
+                    Collection
+                </a>
+
+                <a
+                    href="/storage"
+                    class="{% if request.path.startswith('/storage') %}active{% endif %}"
+                >
+                    <span class="nav-icon">▣</span>
+                    Storage
+                </a>
+
+                <a
+                    href="/add-card"
+                    class="{% if request.path.startswith('/add-card') %}active{% endif %}"
+                >
+                    <span class="nav-icon">✚</span>
+                    Add Cards
+                </a>
+
+                <a href="#">
+                    <span class="nav-icon">✦</span>
+                    Statistics
+                </a>
+
+                <a href="#">
+                    <span class="nav-icon">⚙</span>
+                    Settings
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+
+                <hr>
+
+                <p>Version 0.1 Alpha</p>
+
+                <p>© Brendan Grady</p>
+
+            </div>
+
+        </aside>
+
+        <main class="content">
+
+            {% block content %}
+            {% endblock %}
+
+        </main>
+
+    </div>
 
 </body>
 

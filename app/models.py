@@ -11,12 +11,19 @@ class Storage(db.Model):
 
     name = db.Column(db.String(100), nullable=False)
 
+    # Determines whether this storage location is organized
+    # into sections (pages, colors, slots, etc.)
+    uses_sections = db.Column(
+        db.Boolean,
+        nullable=False,
+        default=False
+    )
+
     sections = db.relationship(
         "StorageSection",
         backref="storage",
         cascade="all, delete-orphan"
     )
-
 
 class StorageSection(db.Model):
 
@@ -39,16 +46,37 @@ class CollectionEntry(db.Model):
 
     quantity = db.Column(db.Integer, nullable=False)
 
-    storage_section_id = db.Column(
+    # Every card MUST belong to a storage location.
+    storage_id = db.Column(
         db.Integer,
-        db.ForeignKey("storage_section.id"),
+        db.ForeignKey("storage.id"),
         nullable=False
     )
 
-    condition = db.Column(db.String(50), nullable=False, default="Near Mint")
+    # Some storage locations have sections.
+    # Others do not.
+    storage_section_id = db.Column(
+        db.Integer,
+        db.ForeignKey("storage_section.id"),
+        nullable=True
+    )
 
-    finish = db.Column(db.String(50), nullable=False, default="Nonfoil")
+    condition = db.Column(
+        db.String(50),
+        nullable=False,
+        default="Near Mint"
+    )
+
+    finish = db.Column(
+        db.String(50),
+        nullable=False,
+        default="Nonfoil"
+    )
 
     notes = db.Column(db.String(1000))
+
+    # These relationships let us access the related objects
+    # instead of just their database IDs.
+    storage = db.relationship("Storage")
 
     storage_section = db.relationship("StorageSection")

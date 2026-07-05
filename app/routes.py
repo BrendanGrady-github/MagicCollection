@@ -69,10 +69,13 @@ def storage():
         storage_type = request.form.get("storage_type")
         name = request.form.get("name")
 
+        uses_sections = request.form.get("uses_sections") == "on"
+
         if storage_type and name:
             new_storage = Storage(
                 storage_type=storage_type,
-                name=name
+                name=name,
+                uses_sections=uses_sections
             )
 
             db.session.add(new_storage)
@@ -87,6 +90,15 @@ def storage():
 
     return render_template("storage.html", locations=storages)
 
+@main.route("/storage/<int:storage_id>")
+def storage_details(storage_id):
+
+    storage = Storage.query.get_or_404(storage_id)
+
+    return render_template(
+        "storage_details.html",
+        storage=storage
+    )
 
 @main.route("/storage/delete/<int:storage_id>", methods=["POST"])
 def delete_storage(storage_id):
