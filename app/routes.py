@@ -1,6 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 
-from app.models import db, Storage
+from app.models import (
+    db,
+    Storage,
+    StorageSection
+)
 from app.services.scryfall import get_card_printings, get_card_by_id
 
 main = Blueprint("main", __name__)
@@ -90,15 +94,38 @@ def storage():
 
     return render_template("storage.html", locations=storages)
 
-@main.route("/storage/<int:storage_id>")
-def storage_details(storage_id):
+
+@main.route("/storage/<int:storage_id>", methods=["GET", "POST"])
+def storage_detail(storage_id):
 
     storage = Storage.query.get_or_404(storage_id)
 
+    if request.method == "POST":
+
+        section_name = request.form.get("section_name")
+
+        if storage.uses_sections and section_name:
+
+            new_section = StorageSection(
+                name=section_name,
+                storage_id=storage.id
+            )
+
+            db.session.add(new_section)
+            db.session.commit()
+
+            return redirect(
+                url_for(
+                    "main.storage_detail",
+                    storage_id=storage.id
+                )
+            )
+
     return render_template(
-        "storage_details.html",
+        "storage_detail.html",
         storage=storage
     )
+
 
 @main.route("/storage/delete/<int:storage_id>", methods=["POST"])
 def delete_storage(storage_id):

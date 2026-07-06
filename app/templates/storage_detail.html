@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>{{ storage.name }}</h2>
+
+<p>
+
+    <strong>Type:</strong>
+    {{ storage.storage_type }}
+
+</p>
+
+<p>
+
+    <strong>Uses Sections:</strong>
+
+    {% if storage.uses_sections %}
+        Yes
+    {% else %}
+        No
+    {% endif %}
+
+</p>
+
+<hr>
+
+{% if storage.uses_sections %}
+
+    <h3>Sections</h3>
+
+    {% if storage.sections %}
+
+        <ul>
+
+            {% for section in storage.sections %}
+
+                <li>
+
+                    {{ section.name }}
+
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    {% else %}
+
+        <p>No sections have been created yet.</p>
+
+    {% endif %}
+
+    <hr>
+
+    <h3>Add Section</h3>
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="section_name"
+            placeholder="Example: Page 1 Slot 1"
+            required
+        >
+
+        <button type="submit">
+
+            Add Section
+
+        </button>
+
+    </form>
+
+{% else %}
+
+    <p>
+
+        This storage location does not use sections.
+
+    </p>
+
+{% endif %}
+
+{% endblock %}
