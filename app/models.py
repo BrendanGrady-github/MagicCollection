@@ -42,25 +42,31 @@ class CollectionEntry(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
+    # Which exact Scryfall printing this is
     scryfall_id = db.Column(db.String(36), nullable=False)
 
+    # How many copies are owned
     quantity = db.Column(db.Integer, nullable=False)
 
-    # Every card MUST belong to a storage location.
+    # Primary storage location (required)
     storage_id = db.Column(
         db.Integer,
         db.ForeignKey("storage.id"),
         nullable=False
     )
 
-    # Some storage locations have sections.
-    # Others do not.
+    storage = db.relationship("Storage")
+
+    # Optional section inside that storage
     storage_section_id = db.Column(
         db.Integer,
         db.ForeignKey("storage_section.id"),
         nullable=True
     )
 
+    storage_section = db.relationship("StorageSection")
+
+    # Information about the physical card
     condition = db.Column(
         db.String(50),
         nullable=False,
@@ -74,9 +80,3 @@ class CollectionEntry(db.Model):
     )
 
     notes = db.Column(db.String(1000))
-
-    # These relationships let us access the related objects
-    # instead of just their database IDs.
-    storage = db.relationship("Storage")
-
-    storage_section = db.relationship("StorageSection")

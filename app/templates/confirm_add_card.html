@@ -2,27 +2,39 @@
 
 {% block content %}
 
-<h2>Add This Card?</h2>
+<h2>Add Card to Collection</h2>
 
 <h3>{{ card.name }}</h3>
 
 <p>
-    {{ card.set_name }} - #{{ card.collector_number }}
+    {{ card.set_name }} • #{{ card.collector_number }}
 </p>
 
 {% if card.image_uris %}
-    <img src="{{ card.image_uris.normal }}" alt="{{ card.name }}" width="300">
+    <img
+        src="{{ card.image_uris.normal }}"
+        alt="{{ card.name }}"
+        width="300"
+    >
 {% endif %}
 
 <hr>
 
 <form method="POST" action="#">
 
-    <input type="hidden" name="scryfall_id" value="{{ card.id }}">
+    <input
+        type="hidden"
+        name="scryfall_id"
+        value="{{ card.id }}"
+    >
 
-    <label>Quantity:</label>
+    <label for="quantity">
+        Quantity
+    </label>
+
     <input
         type="number"
+        id="quantity"
         name="quantity"
         value="1"
         min="1"
@@ -30,9 +42,14 @@
 
     <br><br>
 
-    <label>Condition:</label>
+    <label for="condition">
+        Condition
+    </label>
 
-    <select name="condition">
+    <select
+        id="condition"
+        name="condition"
+    >
         <option value="Near Mint">Near Mint</option>
         <option value="Lightly Played">Lightly Played</option>
         <option value="Moderately Played">Moderately Played</option>
@@ -42,9 +59,14 @@
 
     <br><br>
 
-    <label>Finish:</label>
+    <label for="finish">
+        Finish
+    </label>
 
-    <select name="finish">
+    <select
+        id="finish"
+        name="finish"
+    >
 
         {% for finish in card.finishes %}
 
@@ -58,11 +80,61 @@
 
     <br><br>
 
-    <label>Notes:</label>
+    <label for="storage">
+        Storage Location
+    </label>
+
+    <select
+        id="storage"
+        name="storage_id"
+        required
+>
+
+        <option value="">
+            -- Select Storage --
+        </option>
+
+        {% for storage in storages %}
+
+            <option value="{{ storage.id }}">
+                {{ storage.name }}
+            </option>
+
+        {% endfor %}
+
+    </select>
+
+    <br><br>
+
+    <div id="section-container">
+
+    <label for="section">
+        Storage Section
+    </label>
+
+    <select
+        id="section"
+        name="storage_section_id"
+    >
+
+        <option value="">
+            None
+        </option>
+
+    </select>
+
+</div>
+
+    <br>
+
+    <label for="notes">
+        Notes
+    </label>
 
     <br>
 
     <textarea
+        id="notes"
         name="notes"
         rows="4"
         cols="50"
@@ -75,5 +147,57 @@
     </button>
 
 </form>
+
+<script>
+
+const storageSelect = document.getElementById("storage");
+const sectionSelect = document.getElementById("section");
+const sectionContainer = document.getElementById("section-container");
+
+sectionContainer.style.display = "none";
+
+storageSelect.addEventListener("change", async function () {
+
+    const storageId = storageSelect.value;
+
+    sectionSelect.innerHTML =
+        '<option value="">None</option>';
+
+    if (!storageId) {
+
+        sectionContainer.style.display = "none";
+        return;
+
+    }
+
+    const response = await fetch(
+        `/storage/${storageId}/sections`
+    );
+
+    const sections = await response.json();
+
+    if (sections.length === 0) {
+
+        sectionContainer.style.display = "none";
+        return;
+
+    }
+
+    sectionContainer.style.display = "block";
+
+    sections.forEach(function(section) {
+
+        const option = document.createElement("option");
+
+        option.value = section.id;
+        option.textContent = section.name;
+
+        sectionSelect.appendChild(option);
+
+    });
+
+});
+
+</script>
 
 {% endblock %}

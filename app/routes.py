@@ -1,4 +1,11 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    jsonify
+)
 
 from app.models import (
     db,
@@ -57,6 +64,7 @@ def add_card():
 
 @main.route("/add-card/confirm")
 def confirm_add_card():
+
     scryfall_id = request.args.get("scryfall_id")
 
     card = get_card_by_id(scryfall_id)
@@ -64,7 +72,19 @@ def confirm_add_card():
     if card is None:
         return "Card not found.", 404
 
-    return render_template("confirm_add_card.html", card=card)
+    # Retrieve every storage location from the database.
+    # We'll use these to populate the Storage dropdown
+    # on the Add Card page.
+    storages = Storage.query.order_by(
+        Storage.storage_type,
+        Storage.name
+    ).all()
+
+    return render_template(
+        "confirm_add_card.html",
+        card=card,
+        storages=storages
+    )
 
 
 @main.route("/storage", methods=["GET", "POST"])
@@ -126,6 +146,25 @@ def storage_detail(storage_id):
         storage=storage
     )
 
+@main.route("/storage/<int:storage_id>/sections")
+def get_storage_sections(storage_id):
+
+    storage = Storage.query.get_or_404(storage_id)
+
+    sections = []
+
+    if storage.uses_sections:
+
+        for section in storage.sections:
+
+            sections.append(
+                {
+                    "id": section.id,
+                    "name": section.name
+                }
+            )
+
+    return jsonify(sections)
 
 @main.route("/storage/delete/<int:storage_id>", methods=["POST"])
 def delete_storage(storage_id):
